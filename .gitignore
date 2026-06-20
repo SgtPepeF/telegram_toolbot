@@ -1,4 +1,6 @@
 # База.
 venv
 .env
-.db
+*.db
+
+__pycache__/

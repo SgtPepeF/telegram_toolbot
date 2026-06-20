@@ -5,32 +5,37 @@ import requests
 
 from dotenv import load_dotenv
 
+from .constants import (
+    BASE_OPEN_WEATHER_API_URL,
+    DAYTIME_FORMAT,
+    DTTM_FORMAT,
+)
 from .utils import (
     compass_direction,
 )
 
 load_dotenv()
 
-API_TOKEN = os.getenv('API_TOKEN', 'put your OpenWeatherMap token here or set its value in .env file.')
-
-# using openweathermap api to get forecast
-BASE_URL = 'https://api.openweathermap.org/data/2.5/weather'
-
-DTTM_FORMAT = '%H:%M %d-%m-%Y'
-DAYTIME_FORMAT = '%H:%M'
+API_TOKEN = os.getenv(
+    'API_TOKEN',
+    'put your OpenWeatherMap token here or set its value in .env file.'
+)
 
 
 def get_openweather_url(city='perm', lon=57.999191, lat=56.274835):
-    url = BASE_URL + f'?appid={API_TOKEN}&lang=ru&units=metric'
+    url = f'{BASE_OPEN_WEATHER_API_URL}?appid={API_TOKEN}&lang=ru&units=metric'
     if city:
-        return url + f'&q={city}'
+        return f'{url}&q={city}'
     elif lon and lat:
-        return url + f'&lat={lat}&lon={lon}'
+        return f'{url}&lat={lat}&lon={lon}'
 
-    raise LookupError('url must contain either city name or longitude and lattitude of location.')
+    raise LookupError(
+        'url must contain either city name or lon and lat of location.'
+    )
 
 
 def forecast(city='perm') -> str:
+    """Gets and parses weather_api response constructing a bot message."""
 
     current_dttm = datetime.now()
     current_dttm_str = current_dttm.strftime(format=DTTM_FORMAT)
@@ -42,11 +47,11 @@ def forecast(city='perm') -> str:
 
     response = requests.get(url)
 
-    # Если от API пришёл плохой ответ, возвращаем
+    # in case of weather API bad response:
     if response.status_code != HTTPStatus.OK:
         # ADD LOGGING ERROR
         return f"""
-            Нет ответа от {BASE_URL}
+            Нет ответа от {BASE_OPEN_WEATHER_API_URL}
             Статус - {response.status_code}.
         """.replace('    ', '')
 
@@ -63,8 +68,12 @@ def forecast(city='perm') -> str:
     wind_deg = data['wind']['deg']
     wind_direction = compass_direction(wind_deg)
 
-    sunrise = datetime.fromtimestamp(data['sys']['sunrise']).strftime(format=DAYTIME_FORMAT)
-    sunset = datetime.fromtimestamp(data['sys']['sunset']).strftime(format=DAYTIME_FORMAT)
+    sunrise = datetime.fromtimestamp(
+        data['sys']['sunrise']
+    ).strftime(format=DAYTIME_FORMAT)
+    sunset = datetime.fromtimestamp(
+        data['sys']['sunset']
+    ).strftime(format=DAYTIME_FORMAT)
 
     return f"""
         Погода в -{city.capitalize()}- на {current_dttm_str}:
