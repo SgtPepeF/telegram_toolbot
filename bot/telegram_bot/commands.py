@@ -63,7 +63,7 @@ def send_forecat(user_id, argument=None):
 def send_help(user_id, argument=None):
     HELP_ACTIONS = {
         'register', 'зарегистрировать',
-        'weather', 'погода',
+        'forecast', 'weather', 'погода',
         'time', 'время',
         'plan', 'запланируй',
         'delete', 'удалить',
@@ -125,7 +125,7 @@ def send_help(user_id, argument=None):
             Используйте команду "/register time [HH:MM]", чтобы указать ваш часовой пояс.
         """
 
-    if need_full_help or argument in {'weather', 'погода'}:
+    if need_full_help or argument in {'weather', 'погода', 'forecast'}:
         HELP_TEXT += """
 
             ☀️ /weather [город]
@@ -133,6 +133,7 @@ def send_help(user_id, argument=None):
             ✏️ __Примеры команды__:
              --> /погода Москва
              --> /weather perm
+             --> /forecast perm
              --> /погода
         """
 

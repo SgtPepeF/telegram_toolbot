@@ -1,4 +1,3 @@
-from datetime import datetime
 from http import HTTPStatus
 import requests
 
@@ -7,8 +6,6 @@ from settings import (
 )
 from .constants import (
     BASE_OPEN_WEATHER_API_URL,
-    DAYTIME_FORMAT,
-    DTTM_FORMAT,
 )
 from .utils import (
     get_openweather_url,
@@ -18,9 +15,6 @@ from .utils import (
 
 def forecast(city=DEFAULT_OPENWEATHER_REGION) -> str:
     """Gets and parses weather_api response constructing a bot message."""
-
-    current_dttm = datetime.now()
-    current_dttm_str = current_dttm.strftime(format=DTTM_FORMAT)
 
     try:
         url = get_openweather_url(city)
@@ -41,7 +35,7 @@ def forecast(city=DEFAULT_OPENWEATHER_REGION) -> str:
     data = response.json()
 
     weather_discription = data['weather'][0]['description']
-    tempreture = data['main']['temp']
+    tempreture = round(data['main']['temp'], 1)
     tempreture_experienced = round(data['main']['feels_like'])
 
     pressure = data['main']['pressure']
@@ -51,21 +45,13 @@ def forecast(city=DEFAULT_OPENWEATHER_REGION) -> str:
     wind_deg = data['wind']['deg']
     wind_direction = compass_direction(wind_deg)
 
-    sunrise = datetime.fromtimestamp(
-        data['sys']['sunrise']
-    ).strftime(format=DAYTIME_FORMAT)
-    sunset = datetime.fromtimestamp(
-        data['sys']['sunset']
-    ).strftime(format=DAYTIME_FORMAT)
-
     return f"""
-        Погода в -{city.capitalize()}- на {current_dttm_str}:
+        Погода в -{city.capitalize()}-
         {weather_discription.capitalize()} {tempreture}°C; Ощущается как {tempreture_experienced}°C.
 
         Влажность: {humidity}%
         Ветер: [{wind_direction}] {wind_speed} м/с
         Давление: {pressure} мм.рт.ст.
-        Световой день: ☀️{sunrise} -- 🌌{sunset}.
     """.replace('    ', '')
 
 

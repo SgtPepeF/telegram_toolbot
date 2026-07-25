@@ -65,7 +65,7 @@ def send_current_time(message):
     return send_time(message.from_user.id)
 
 
-@telegtam_bot.message_handler(commands=['forecast', 'погода'])
+@telegtam_bot.message_handler(commands=['weather', 'forecast', 'погода'])
 def reply_forecast(message):
     text_to_parse = copy(message.text)
     _, command_argument = pop_first_word(text_to_parse)
@@ -295,7 +295,7 @@ def delete_action(message):
     )
 
 
-# @telegtam_bot.message_handler(content_types=['text'])
-# def common_reply(message):
-#     TEXT_REPLY = """Команда не распознана."""
-#     telegtam_bot.reply_to(message, TEXT_REPLY)
+@telegtam_bot.message_handler(content_types=['text'])
+def common_reply(message):
+    TEXT_REPLY = """Команда не распознана."""
+    telegtam_bot.reply_to(message, TEXT_REPLY)
