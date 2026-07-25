@@ -67,6 +67,6 @@ jobs:
             sudo docker compose -f docker-compose.production.yml up -d
 
             # Запускаем бота
-            sudo docker compose -f docker-compose.production.yml exec telegtam_schedule_bot python db_creation.py
-            sudo docker compose -f docker-compose.production.yml exec telegtam_schedule_bot python populate_db.py
-            sudo docker compose -f docker-compose.production.yml exec telegtam_schedule_bot python main.py
+            sudo docker compose -f docker-compose.production.yml exec scheduler_bot python db_creation.py
+            sudo docker compose -f docker-compose.production.yml exec scheduler_bot python populate_db.py
+            sudo docker compose -f docker-compose.production.yml exec scheduler_bot python main.py

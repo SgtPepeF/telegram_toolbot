@@ -1,12 +1,17 @@
 from datetime import datetime
 
 from database import SessionLocal
-from database.queries import create_user
-from scheduler.queries import create_task
+from database.queries import create_user, get_user
+from scheduler.queries import (
+    create_task,
+    create_user_timezone,
+    get_user_timezone,
+)
 from weather.queries import create_location
 
 from settings import (
     ADMIN_TELEGRAM_ID,
+    ADMIN_TIMEZONE,
     DEFAULT_OPENWEATHER_REGION,
 )
 
@@ -26,6 +31,8 @@ except ValueError as user_exists:
 except KeyError as wrong_params:
     print(wrong_params)
 
+user = get_user({'user_id': ADMIN_TELEGRAM_ID})
+
 # determine admin user region
 # create admin user
 try:
@@ -41,55 +48,102 @@ except KeyError as wrong_params:
     print(wrong_params)
 
 
+# determine admin user region
+try:
+    create_location(
+        location_kwargs={
+            'user_id': ADMIN_TELEGRAM_ID,
+            'location': DEFAULT_OPENWEATHER_REGION,
+        }
+    )
+except ValueError as location_exists:
+    print(location_exists)
+except KeyError as wrong_params:
+    print(wrong_params)
+
+
+# creating admin timezone
+create_user_timezone(
+    user_id=ADMIN_TELEGRAM_ID,
+    user_timedelta=ADMIN_TIMEZONE,
+)
+
+amdin_timezone = get_user_timezone(ADMIN_TELEGRAM_ID)
+admin_server_timedelta = amdin_timezone.user_server_timedelta
+
 task_to_schedule = [
     # [task, regular_flg, argument, execute_time]
     [
         'send_message',
         True,
         'Полночь. Никакой больше работы!!! 🌙🌌',
-        datetime.strptime('00:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '00:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_message',
         True,
         'Good morning, World! 😎',
-        datetime.strptime('08:59', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '08:59',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_message',
         True,
         'Полдень. Praise the SUN! 🔥☀️🌻',
-        datetime.strptime('12:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '12:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_message',
         True,
         '18:00 Рабочий день окончен. 🌈',
-        datetime.strptime('18:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '18:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_forecat',
         True,
         DEFAULT_OPENWEATHER_REGION,
-        datetime.strptime('00:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '00:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_forecat',
         True,
         DEFAULT_OPENWEATHER_REGION,
-        datetime.strptime('09:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '09:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_forecat',
         True,
         DEFAULT_OPENWEATHER_REGION,
-        datetime.strptime('12:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '12:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ],
     [
         'send_forecat',
         True,
         DEFAULT_OPENWEATHER_REGION,
-        datetime.strptime('18:00', REGULAR_TASK_TIME_FORMAT),
+        datetime.strptime(
+            '18:00',
+            REGULAR_TASK_TIME_FORMAT
+        ) + admin_server_timedelta,
     ]
 ]
 

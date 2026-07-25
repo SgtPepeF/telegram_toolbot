@@ -1,4 +1,6 @@
 import os
+from datetime import timedelta
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +12,13 @@ TELEGRAM_API_TOKEN = os.getenv(
     'put your telegram token here or set its value in .env file'
 )
 ADMIN_TELEGRAM_ID = int(os.getenv('ADMIN_TELEGRAM_ID'))
-ADMIN_USERNAME = os.getenv('ADMIN_USERNAME')
+
+hours, minutes = [
+    int(time_value)
+    for time_value
+    in os.getenv('ADMIN_TIMEZONE').split(':')
+]
+ADMIN_TIMEZONE = timedelta(hours=hours, minutes=minutes)
 
 OPEN_WEATHER_API_TOKEN = os.getenv(
     'OPEN_WEATHER_API_TOKEN',
