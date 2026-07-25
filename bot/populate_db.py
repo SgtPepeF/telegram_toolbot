@@ -80,7 +80,7 @@ task_to_schedule = [
         datetime.strptime(
             '00:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_message',
@@ -89,7 +89,7 @@ task_to_schedule = [
         datetime.strptime(
             '08:59',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_message',
@@ -98,7 +98,7 @@ task_to_schedule = [
         datetime.strptime(
             '12:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_message',
@@ -107,7 +107,7 @@ task_to_schedule = [
         datetime.strptime(
             '18:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_forecat',
@@ -116,7 +116,7 @@ task_to_schedule = [
         datetime.strptime(
             '00:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_forecat',
@@ -125,7 +125,7 @@ task_to_schedule = [
         datetime.strptime(
             '09:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_forecat',
@@ -134,7 +134,7 @@ task_to_schedule = [
         datetime.strptime(
             '12:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ],
     [
         'send_forecat',
@@ -143,7 +143,7 @@ task_to_schedule = [
         datetime.strptime(
             '18:00',
             REGULAR_TASK_TIME_FORMAT
-        ) + admin_server_timedelta,
+        ) - admin_server_timedelta,
     ]
 ]
 
